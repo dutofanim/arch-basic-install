@@ -8,21 +8,53 @@ Remember that the first part of the Arch Linux install is manual, that is you wi
 A small summary:
 
 1. If needed, load your keymap with `loadkeys`
-2. Refresh the servers with
-    `pacman -Syy`
+2. Refresh the servers with:
+
+	```bash
+    pacman -Syy
+	```
+
 3. Partition the disk
 4. Format the partitions
 5. Mount the partitions
 6. Install the base packages into `/mnt` with:
-    ```pacstrap /mnt base linux linux-firmware git vim intel-ucode (or amd-ucode)```
+
+	```bash
+    pacstrap /mnt base linux linux-firmware git vim intel-ucode (or amd-ucode)
+	```
+
 7. Generate the `FSTAB` file with:
-    ```genfstab -U /mnt >> /mnt/etc/FSTAB```
-8. Chroot in with arch-chroot /mnt
-9.  Download the git repository with:
-    ```git clone https://github.com/dutofanim/arch-basic-install.git```
+
+	```bash
+    genfstab -U /mnt >> /mnt/etc/fstab
+	```
+
+8. Chroot in with:
+
+	```bash
+    arch-chroot /mnt
+	```
+
+9. Download the git repository with:
+
+	```bash
+    git clone https://github.com/dutofanim/arch-basic-install.git
+	```
+
 10. Move to the new directory: 
-    ```cd arch-basic-install```
+
+	```bash
+    cd arch-basic-install
+	```
+
 11. Give execute permission to script file:
-    ```chmod +x install-uefi.sh```
+
+	```bash
+    chmod +x install-uefi.sh
+	```
+
 12. Execute the script:
-    ```./install-uefi.sh```
+
+	```bash
+    ./install-uefi.sh
+	```
