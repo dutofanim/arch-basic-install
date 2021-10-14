@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables definition
-LOCALE="en_US"
-HOST_NAME="arch"
+LOCALE="en_US.UTF-8"
+HOST_NAME="archGDM"
 KEY_MAP="br-abnt2"
 USER_NAME="du"
 USER_PASSWORD=""
@@ -78,6 +78,14 @@ function add_user {
     passwd -l root
 }
 
+show_info() {
+  echo -e $'\033[1;32m'"$*"$'\033[0m'
+}
+
+show_error() {
+  echo -e $'\033[1;31m'"$*"$'\033[0m' 1>&2
+}
+
 # Bash Commands
 timedatectl set-ntp true
 ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
@@ -85,8 +93,8 @@ hwclock --systohc
 
 ask_locale
 sed -i '177s/.//' /etc/locale.gen
-locale-gen
 echo "LANG=${LOCALE}" >/etc/locale.conf
+locale-gen
 ask_keymap
 echo -e "${KEY_MAP}" >/etc/vconsole.conf
 ask_hostname
