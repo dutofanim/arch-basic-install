@@ -8,10 +8,6 @@ USER_NAME="du"
 USER_PASSWORD=""
 
 # Functions definition
-ask_question() {
-    read -r -p $'\033[1;34m'"$* "$'\033[0m' var
-    echo "${var}"
-}
 
 function ask_locale {
     local tmp
@@ -76,6 +72,11 @@ function add_user {
 
     # disable root account
     passwd -l root
+}
+
+ask_question() {
+    read -r -p $'\033[1;34m'"$* "$'\033[0m' var
+    echo "${var}"
 }
 
 show_info() {
