@@ -87,38 +87,43 @@ show_error() {
   echo -e $'\033[1;31m'"$*"$'\033[0m' 1>&2
 }
 
-# Bash Commands
+# Set time and zoneinfo
 timedatectl set-ntp true
 ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 hwclock --systohc
 
+# Set locale
 ask_locale
 sed -i '177s/.//' /etc/locale.gen
 echo "LANG=${LOCALE}" >/etc/locale.conf
 locale-gen
+
+# Set keymap
 ask_keymap
 echo -e "${KEY_MAP}" >/etc/vconsole.conf
+
+# Set hostname and hosts
 ask_hostname
 echo -e "${HOST_NAME}" >/etc/hostname
-
-echo -e "127.0.0.1\tlocalhost \n::1 \t\tlocalhost \n127.0.1.1\tarchGDM.localdomain\tarchGDM" >>/etc/hosts
+echo -e "127.0.0.1\tlocalhost \n::1 \t\tlocalhost \n127.0.1.1\t${HOST_NAME}.localdomain\t${HOST_NAME}" >>/etc/hosts
 
 # You can remove the tlp package if you are installing on a desktop or vm
+pacman -S grub grub-btrfs efibootmgr networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools linux-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils inetutils dnsutils bluez bluez-utils cups openssh rsync acpi acpi_call tlp edk2-ovmf bridge-utils dnsmasq vde2 openbsd-netcat iptables-nft ipset firewalld sof-firmware nss-mdns acpid os-prober
 
-pacman -S grub grub-btrfs efibootmgr networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools reflector base-devel linux-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call tlp virt-manager qemu qemu-arch-extra edk2-ovmf bridge-utils dnsmasq vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns acpid os-prober ntfs-3g terminus-font udisks2 zip p7zip
+# pacman -S --noconfirm xf86-video-amdgpu # Uncomment this if you have an AMD graphic card
+# pacman -S --noconfirm nvidia nvidia-utils nvidia- # Uncomment this if you have an Nvidia graphic card
 
-# pacman -S --noconfirm xf86-video-amdgpu # If you have an AMDGPU
-pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
-
+# GRUB install
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 
+# Enabling system services
 systemctl enable NetworkManager
 systemctl enable bluetooth
 systemctl enable cups.service
 systemctl enable sshd
 systemctl enable avahi-daemon
-systemctl enable tlp # You can comment this command out if you didn't install tlp, see above
+systemctl enable tlp # You can comment this command out if you didn't install tlp
 systemctl enable reflector.timer
 systemctl enable fstrim.timer
 systemctl enable libvirtd
